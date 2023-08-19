@@ -2,17 +2,30 @@
 
 import React, { useState } from "react";
 import Modal from "./Modal";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
 const AddPost = () => {
+  const router = useRouter();
+
   const [modalOpen, setModalOpen] = useState(false);
   const [inputs, setInputs] = useState({});
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    console.log(inputs);
-
-    setInputs({});
+    axios
+      .post("/api/posts", inputs)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        setInputs({});
+        setModalOpen(false);
+        router.refresh();
+      });
   };
 
   const handleChange = (e) => {
